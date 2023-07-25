@@ -23,6 +23,8 @@ app.config['SECRET_KEY'] = 'super-secret-key'
 
 @app.route('/', methods=['GET', 'POST'])
 def signin():
+    # if request.method == 'POST':
+        
     return render_template("signin.html")
 
 
@@ -42,15 +44,23 @@ def signup():
 
 @app.route('/add_tweet', methods=['GET', 'POST'])
 def add_tweet():
-    if request.form == 'POST':
-        login_session['user'] = auth.create_user_with_email_and_password(email,password)
-        uid= login_session['user']['localId']
-        db.child("tweet").push(tweet)
-        tweet = {"title" : request.form['title'],"tweet": request.form['tweet'],"uid":uid}
-    return render_template("add_tweet.html")
+    if request.method == 'POST':
+        try:
+            uid= login_session['user']['localId']
+            tweet = {"title" : request.form['title'], "tweet": request.form['tweet'], "uid":uid}
+            db.child("Tweets").push(tweet)
+            return redirect(url_for('all_tweet'))
+        except:
+            error = "Tweet error, please try again"
+            return render_template("add_tweet.html", error_msg = error)
+    else:
+        return render_template('add_tweet.html')
+
+
 @app.route('/all_tweets')
 def all_tweet():
     all_tweet1 = db.child("tweet").get().val()
+    return render_template("tweets.html" , all_tweet=all_tweet1)
 
 
 if __name__ == '__main__':

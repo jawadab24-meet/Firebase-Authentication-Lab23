@@ -6,11 +6,16 @@
 </head>
 <body>
     Great Job!
-    <from action = "/add_tweet" method = "POST">
+    <form method="POST" action="/add_tweet" >
          <input type="text" name="title" placeholder=" title of put tweet">
          <input type="text" name="tweet" placeholder="put tweet">
+         <div>
+            <input type="submit"/>
+        </div>
 
-    </from>
-    <a href="tweets.html"> all tweets</a>
+    </form>
+
+    <font color="red">{{ error_msg }}</font>
+    <!-- <a href="/all_tweets"> all tweets</a> -->
 </body>
 </html>
